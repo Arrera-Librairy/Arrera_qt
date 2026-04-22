@@ -1,0 +1,28 @@
+{
+  "light": {
+    "Window": "#FFFFFF",
+    "WindowText": "#1A1A1A",
+    "Base": "#FFFFFF",
+    "AlternateBase": "#F2F2F2",
+    "ToolTipBase": "#FFFFFF",
+    "ToolTipText": "#1A1A1A",
+    "Text": "#1A1A1A",
+    "Button": "#FFFFFF",
+    "ButtonText": "#1A1A1A",
+    "Highlight": "#2196F3",
+    "HighlightedText": "#FFFFFF"
+  },
+  "dark": {
+    "Window": "#121212",
+    "WindowText": "#E0E0E0",
+    "Base": "#1E1E1E",
+    "AlternateBase": "#181818",
+    "ToolTipBase": "#242424",
+    "ToolTipText": "#FFFFFF",
+    "Text": "#FFFFFF",
+    "Button": "#1E1E1E",
+    "ButtonText": "#E0E0E0",
+    "Highlight": "#29B6F6",
+    "HighlightedText": "#000000"
+  }
+}
