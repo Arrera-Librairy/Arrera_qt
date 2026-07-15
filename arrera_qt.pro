@@ -14,12 +14,14 @@ SOURCES += \
     main.cpp \
     arrera_qt/apushbutton.cpp \
     arrera_qt/asearchbar.cpp \
+    arrera_qt/aapplicationbar.cpp \
     arrera_qt/arrera_theme.cpp \
     test_ui.cpp
 
 HEADERS += \
     arrera_qt/apushbutton.h \
     arrera_qt/asearchbar.h \
+    arrera_qt/aapplicationbar.h \
     arrera_qt/arrera_theme.h \
     arrera_qt/roundedframe.h \
     test_ui.h

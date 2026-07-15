@@ -41,6 +41,31 @@
      </widget>
     </item>
     <item>
+     <widget class="AApplicationBar" name="frame_2">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>102</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="ASearchBar" name="lineEdit"/>
     </item>
     <item>
@@ -82,6 +107,12 @@
    <class>ASearchBar</class>
    <extends>QLineEdit</extends>
    <header>arrera_qt/asearchbar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AApplicationBar</class>
+   <extends>QFrame</extends>
+   <header>arrera_qt/aapplicationbar.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
