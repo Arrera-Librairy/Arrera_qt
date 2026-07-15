@@ -1,4 +1,6 @@
 /build/
 .qtcreator/
 .DS_store
-.user
+*.autosave
+*.user
+*.backup
