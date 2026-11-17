@@ -1,5 +1,5 @@
-#ifndef ARRERA_THEME_CPP
-#define ARRERA_THEME_CPP
+#ifndef ARRERA_THEME_H
+#define ARRERA_THEME_H
 
 #include <QApplication>
 #include <QWidget>
@@ -33,4 +33,4 @@ private:
     QPalette m_darkPalette;
 };
 
-#endif // ARRERA_THEME_CPP
+#endif // ARRERA_THEME_H

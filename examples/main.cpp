@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     // Initialisation optionnelle du thème si besoin
     Arrera_Theme themeManager;
-    themeManager.loadThemeFromJson("theme/theme_default.json");
+    themeManager.loadThemeFromJson(":/arrera_qt/theme/theme_default.json");
 
     test_ui window;
     window.show();

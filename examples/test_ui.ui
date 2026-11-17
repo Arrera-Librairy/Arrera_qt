@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="RoundedFrame" name="frame">
+     <widget class="AFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
       </property>
@@ -98,9 +98,9 @@
    <header>arrera_qt/apushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>RoundedFrame</class>
+   <class>AFrame</class>
    <extends>QFrame</extends>
-   <header>arrera_qt/roundedframe.h</header>
+   <header>arrera_qt/aframe.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

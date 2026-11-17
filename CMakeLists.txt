@@ -1,44 +1,60 @@
 cmake_minimum_required(VERSION 3.16)
-project(arrera_qt_test VERSION 1.0 LANGUAGES C CXX)
+project(arrera_qt VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
-
-find_package(Qt6 REQUIRED COMPONENTS Gui Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
 qt_standard_project_setup()
 
-qt_add_executable(arrera_qt_test WIN32 MACOSX_BUNDLE
-    arrera_qt/aapplicationbar.cpp arrera_qt/aapplicationbar.h
-    arrera_qt/apushbutton.cpp arrera_qt/apushbutton.h
-    arrera_qt/arrera_theme.cpp arrera_qt/arrera_theme.h
-    arrera_qt/asearchbar.cpp arrera_qt/asearchbar.h
-    arrera_qt/roundedframe.cpp arrera_qt/roundedframe.h
-    main.cpp
-    test_ui.cpp test_ui.h test_ui.ui
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" ARRERA_QT_IS_TOP_LEVEL)
+option(ARRERA_QT_BUILD_EXAMPLES "Build the arrera_qt demo application" ${ARRERA_QT_IS_TOP_LEVEL})
+
+qt_add_library(arrera_qt STATIC
+    include/arrera_qt/aapplicationbar.h
+    include/arrera_qt/aframe.h
+    include/arrera_qt/apushbutton.h
+    include/arrera_qt/arrera_theme.h
+    include/arrera_qt/asearchbar.h
+    src/aapplicationbar.cpp
+    src/aframe.cpp
+    src/apushbutton.cpp
+    src/arrera_theme.cpp
+    src/asearchbar.cpp
 )
-target_include_directories(arrera_qt_test PRIVATE
-    arrera_qt
+add_library(Arrera::Qt ALIAS arrera_qt)
+
+target_compile_features(arrera_qt PUBLIC cxx_std_17)
+
+target_include_directories(arrera_qt PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
-target_compile_definitions(arrera_qt_test PRIVATE
+target_compile_definitions(arrera_qt PRIVATE
     QT_DEPRECATED_WARNINGS
 )
 
-target_link_libraries(arrera_qt_test PRIVATE
+target_link_libraries(arrera_qt PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Widgets
 )
 
-install(TARGETS arrera_qt_test
-    BUNDLE DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+qt_add_resources(arrera_qt "arrera_qt_themes"
+    PREFIX "/arrera_qt"
+    FILES
+        theme/theme_blanc.json
+        theme/theme_blanc_gris.json
+        theme/theme_bleu.json
+        theme/theme_bleu_blanc.json
+        theme/theme_bleu_violet.json
+        theme/theme_default.json
+        theme/theme_gris.json
+        theme/theme_jaune.json
+        theme/theme_orange.json
+        theme/theme_rose.json
+        theme/theme_rouge.json
 )
 
-qt_generate_deploy_app_script(
-    TARGET arrera_qt_test
-    OUTPUT_SCRIPT deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
+if(ARRERA_QT_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()

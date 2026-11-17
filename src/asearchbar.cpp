@@ -1,4 +1,4 @@
-#include "asearchbar.h"
+#include "arrera_qt/asearchbar.h"
 #include <QPainter>
 #include <QEvent>
 #include <QEnterEvent>

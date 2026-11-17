@@ -1,4 +1,4 @@
-#include "aapplicationbar.h"
+#include "arrera_qt/aapplicationbar.h"
 #include <QPainter>
 #include <QPainterPath>
 #include <QStyle>

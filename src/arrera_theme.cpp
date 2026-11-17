@@ -1,4 +1,4 @@
-#include "arrera_theme.h"
+#include "arrera_qt/arrera_theme.h"
 
 Arrera_Theme::Arrera_Theme(QObject *parent)
     : QObject(parent), m_autoTracking(true)

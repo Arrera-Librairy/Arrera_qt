@@ -1,10 +1,10 @@
-#include "roundedframe.h"
+#include "arrera_qt/aframe.h"
 
-RoundedFrame::RoundedFrame(QWidget *parent) : QFrame(parent)
+AFrame::AFrame(QWidget *parent) : QFrame(parent)
 {
 }
 
-void RoundedFrame::paintEvent(QPaintEvent *event)
+void AFrame::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
