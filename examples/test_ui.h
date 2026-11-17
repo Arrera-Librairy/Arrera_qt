@@ -21,6 +21,7 @@ private:
     void setupFrameShowcase();
     void setupControlsShowcase();
     void setupNavigationAndFeedbackShowcase();
+    void setupComfortShowcase();
 
     Ui::test_ui *ui;
 };

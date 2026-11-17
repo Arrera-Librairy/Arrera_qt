@@ -2,6 +2,7 @@
 #include "ui_test_ui.h"
 #include "arrera_qt/acheckbox.h"
 #include "arrera_qt/aframe.h"
+#include "arrera_qt/alabel.h"
 #include "arrera_qt/alineedit.h"
 #include "arrera_qt/anavbutton.h"
 #include "arrera_qt/aprogressbar.h"
@@ -10,8 +11,10 @@
 #include "arrera_qt/arrera_theme.h"
 #include "arrera_qt/ascrollarea.h"
 #include "arrera_qt/asegmentedbutton.h"
+#include "arrera_qt/asettingrow.h"
 #include "arrera_qt/aslider.h"
 #include "arrera_qt/aswitch.h"
+#include "arrera_qt/atoast.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -30,6 +33,7 @@ test_ui::test_ui(QWidget *parent)
     setupFrameShowcase();
     setupControlsShowcase();
     setupNavigationAndFeedbackShowcase();
+    setupComfortShowcase();
 }
 
 test_ui::~test_ui()
@@ -271,4 +275,61 @@ void test_ui::setupNavigationAndFeedbackShowcase()
         barLayout->insertWidget(1, navFiles);
         barLayout->insertWidget(2, navPrefs);
     }
+}
+
+void test_ui::setupComfortShowcase()
+{
+    // ALabel hiérarchie + ASettingRow + déclenchement AToast
+    auto *titleLabel = new ALabel(tr("Arrera Qt — Galerie des composants"), ALabel::Typography::Title, ui->frame);
+    auto *captionLabel = new ALabel(tr("Style hybride GTK4 (libadwaita) & Material 3 Expressive"), ALabel::Typography::Caption, ui->frame);
+
+    ui->verticalLayout_2->insertWidget(0, titleLabel);
+    ui->verticalLayout_2->insertWidget(1, captionLabel);
+
+    auto *settingsCard = new AFrame(ui->frame);
+    settingsCard->setCardStyle(AFrame::CardStyle::Elevated);
+    auto *settingsLayout = new QVBoxLayout(settingsCard);
+    settingsLayout->setContentsMargins(0, 4, 0, 4);
+    settingsLayout->setSpacing(0);
+
+    auto *rowSwitch = new ASettingRow(
+        tr("Enregistrement automatique"),
+        tr("Sauvegarde le thème actif dans QSettings"),
+        settingsCard);
+    rowSwitch->setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
+    rowSwitch->setActivatable(true);
+    rowSwitch->setShowDivider(true);
+    auto *autoSaveSwitch = new ASwitch(rowSwitch);
+    autoSaveSwitch->setChecked(Arrera_Theme::instance()->isPersistenceEnabled());
+    rowSwitch->setWidget(autoSaveSwitch);
+    connect(autoSaveSwitch, &ASwitch::toggled, this, [this](bool enabled) {
+        Arrera_Theme::instance()->setPersistenceEnabled(enabled);
+        AToast::showToast(
+            this,
+            enabled ? tr("Persistance du thème activée") : tr("Persistance désactivée"),
+            enabled ? AToast::Type::Success : AToast::Type::Info);
+    });
+
+    auto *rowToast = new ASettingRow(
+        tr("Tester la notification flottante"),
+        tr("Affiche un AToast en bas de la fenêtre"),
+        settingsCard);
+    rowToast->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+    auto *toastBtn = new APushButton(tr("Afficher Toast"), rowToast);
+    toastBtn->setVariant(APushButton::Variant::Secondary);
+    rowToast->setWidget(toastBtn);
+    connect(toastBtn, &APushButton::clicked, this, [this]() {
+        auto *toast = AToast::showToast(this, tr("Thème appliqué avec succès"), AToast::Type::Success, 4000);
+        toast->setAction(tr("OK"));
+    });
+
+    settingsLayout->addWidget(rowSwitch);
+    settingsLayout->addWidget(rowToast);
+
+    ui->verticalLayout_2->insertWidget(ui->verticalLayout_2->count() - 1, settingsCard);
+
+    ui->pushButton->setText(tr("Tester Toast Info"));
+    connect(ui->pushButton, &APushButton::clicked, this, [this]() {
+        AToast::showToast(this, tr("Action déclenchée depuis APushButton"), AToast::Type::Info);
+    });
 }

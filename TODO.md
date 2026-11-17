@@ -32,9 +32,9 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 - [x] **`AScrollBar` / `AScrollArea`** *(ou `QProxyStyle`)* : barres de défilement fines et modernes
 
 ### Priorité 3 — Composants confort (style libadwaita)
-- [ ] **`ASettingRow`** *(équivalent `AdwActionRow`)* : ligne titre + sous-titre + contrôle aligné à droite (`ASwitch`, `AComboBox`, `APushButton`)
-- [ ] **`ALabel`** : variantes typographiques prédéfinies (`Title`, `Subtitle`, `Body`, `Caption`)
-- [ ] **`AToast`** : notification flottante discrète en bas de fenêtre
+- [x] **`ASettingRow`** *(équivalent `AdwActionRow`)* : ligne titre + sous-titre + contrôle aligné à droite (`ASwitch`, `AComboBox`, `APushButton`)
+- [x] **`ALabel`** : variantes typographiques prédéfinies (`Title`, `Subtitle`, `Body`, `Caption`)
+- [x] **`AToast`** : notification flottante discrète en bas de fenêtre
 
 ---
 
