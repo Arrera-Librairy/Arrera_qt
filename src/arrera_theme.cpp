@@ -2,6 +2,14 @@
 
 #include <QFileInfo>
 
+namespace {
+QColor withAlpha(QColor col, int alpha)
+{
+    col.setAlpha(qBound(0, alpha, 255));
+    return col;
+}
+} // namespace
+
 Arrera_Theme *Arrera_Theme::s_instance = nullptr;
 
 Arrera_Theme::Arrera_Theme(QObject *parent)
@@ -38,6 +46,48 @@ Arrera_Theme *Arrera_Theme::instance()
         s_instance = new Arrera_Theme(qApp);
     }
     return s_instance;
+}
+
+ArreraThemeTokens Arrera_Theme::tokensForPalette(const QPalette &palette)
+{
+    ArreraThemeTokens tokens;
+    const QColor windowCol = palette.color(QPalette::Window);
+    const QColor windowText = palette.color(QPalette::WindowText);
+    const bool isDark = windowCol.lightness() < 128;
+
+    tokens.surfaceContainer = palette.color(QPalette::AlternateBase);
+    tokens.surfaceElevated = palette.color(QPalette::Base);
+    tokens.outline = withAlpha(windowText, isDark ? 64 : 50);
+    tokens.outlineVariant = withAlpha(windowText, isDark ? 36 : 24);
+    tokens.success = isDark ? QColor(QStringLiteral("#4ADE80")) : QColor(QStringLiteral("#16A34A"));
+    tokens.warning = isDark ? QColor(QStringLiteral("#FBBF24")) : QColor(QStringLiteral("#D97706"));
+    tokens.danger = isDark ? QColor(QStringLiteral("#E5484D")) : QColor(QStringLiteral("#D92D20"));
+    tokens.onSemantic = QColor(Qt::white);
+
+    return tokens;
+}
+
+ArreraThemeTokens Arrera_Theme::currentTokens()
+{
+    if (s_instance) {
+        return s_instance->tokens();
+    }
+    return tokensForPalette(qApp ? qApp->palette() : QPalette());
+}
+
+const ArreraThemeTokens &Arrera_Theme::tokens() const
+{
+    return m_activeTokens;
+}
+
+const ArreraThemeTokens &Arrera_Theme::lightTokens() const
+{
+    return m_lightTokens;
+}
+
+const ArreraThemeTokens &Arrera_Theme::darkTokens() const
+{
+    return m_darkTokens;
 }
 
 QStringList Arrera_Theme::availableThemes()
@@ -100,11 +150,11 @@ bool Arrera_Theme::loadThemeFromJson(const QString &filePath)
         return false;
     }
 
-    QByteArray fileData = file.readAll();
+    const QByteArray fileData = file.readAll();
     file.close();
 
     QJsonParseError parseError;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(fileData, &parseError);
+    const QJsonDocument jsonDoc = QJsonDocument::fromJson(fileData, &parseError);
 
     if (parseError.error != QJsonParseError::NoError || !jsonDoc.isObject()) {
         return false; // Fichier JSON invalide
@@ -112,16 +162,32 @@ bool Arrera_Theme::loadThemeFromJson(const QString &filePath)
 
     setupDefaultPalettes();
 
-    QJsonObject rootObj = jsonDoc.object();
+    const QJsonObject rootObj = jsonDoc.object();
 
     // Parse la section "light"
-    if (rootObj.contains("light") && rootObj["light"].isObject()) {
-        parsePaletteFromJson(rootObj["light"].toObject(), m_lightPalette);
+    if (rootObj.contains(QStringLiteral("light")) && rootObj[QStringLiteral("light")].isObject()) {
+        const QJsonObject lightObj = rootObj[QStringLiteral("light")].toObject();
+        parsePaletteFromJson(lightObj, m_lightPalette);
+        m_lightTokens = tokensForPalette(m_lightPalette);
+        if (rootObj.contains(QStringLiteral("tokens")) && rootObj[QStringLiteral("tokens")].isObject()) {
+            parseTokensFromJson(rootObj[QStringLiteral("tokens")].toObject(), m_lightTokens);
+        }
+        if (lightObj.contains(QStringLiteral("tokens")) && lightObj[QStringLiteral("tokens")].isObject()) {
+            parseTokensFromJson(lightObj[QStringLiteral("tokens")].toObject(), m_lightTokens);
+        }
     }
 
     // Parse la section "dark"
-    if (rootObj.contains("dark") && rootObj["dark"].isObject()) {
-        parsePaletteFromJson(rootObj["dark"].toObject(), m_darkPalette);
+    if (rootObj.contains(QStringLiteral("dark")) && rootObj[QStringLiteral("dark")].isObject()) {
+        const QJsonObject darkObj = rootObj[QStringLiteral("dark")].toObject();
+        parsePaletteFromJson(darkObj, m_darkPalette);
+        m_darkTokens = tokensForPalette(m_darkPalette);
+        if (rootObj.contains(QStringLiteral("tokens")) && rootObj[QStringLiteral("tokens")].isObject()) {
+            parseTokensFromJson(rootObj[QStringLiteral("tokens")].toObject(), m_darkTokens);
+        }
+        if (darkObj.contains(QStringLiteral("tokens")) && darkObj[QStringLiteral("tokens")].isObject()) {
+            parseTokensFromJson(darkObj[QStringLiteral("tokens")].toObject(), m_darkTokens);
+        }
     }
 
     m_currentThemeName = filePath;
@@ -133,30 +199,27 @@ bool Arrera_Theme::loadThemeFromJson(const QString &filePath)
 
 void Arrera_Theme::parsePaletteFromJson(const QJsonObject &jsonObj, QPalette &palette)
 {
-    // Dictionnaire pour lier les chaînes de caractères du JSON aux rôles Qt
     static const QMap<QString, QPalette::ColorRole> roleMap = {
-        {"Window", QPalette::Window},
-        {"WindowText", QPalette::WindowText},
-        {"Base", QPalette::Base},
-        {"AlternateBase", QPalette::AlternateBase},
-        {"ToolTipBase", QPalette::ToolTipBase},
-        {"ToolTipText", QPalette::ToolTipText},
-        {"Text", QPalette::Text},
-        {"Button", QPalette::Button},
-        {"ButtonText", QPalette::ButtonText},
-        {"Highlight", QPalette::Highlight},
-        {"HighlightedText", QPalette::HighlightedText},
-        {"PlaceholderText", QPalette::PlaceholderText},
-        {"Midlight", QPalette::Midlight},
-        {"Mid", QPalette::Mid}
+        {QStringLiteral("Window"), QPalette::Window},
+        {QStringLiteral("WindowText"), QPalette::WindowText},
+        {QStringLiteral("Base"), QPalette::Base},
+        {QStringLiteral("AlternateBase"), QPalette::AlternateBase},
+        {QStringLiteral("ToolTipBase"), QPalette::ToolTipBase},
+        {QStringLiteral("ToolTipText"), QPalette::ToolTipText},
+        {QStringLiteral("Text"), QPalette::Text},
+        {QStringLiteral("Button"), QPalette::Button},
+        {QStringLiteral("ButtonText"), QPalette::ButtonText},
+        {QStringLiteral("Highlight"), QPalette::Highlight},
+        {QStringLiteral("HighlightedText"), QPalette::HighlightedText},
+        {QStringLiteral("PlaceholderText"), QPalette::PlaceholderText},
+        {QStringLiteral("Midlight"), QPalette::Midlight},
+        {QStringLiteral("Mid"), QPalette::Mid}
     };
 
-    // Parcourir toutes les clés de l'objet JSON (ex: "Window", "Text", etc.)
     for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
-        QString key = it.key();
+        const QString key = it.key();
         if (roleMap.contains(key)) {
-            // Si la clé existe dans notre dictionnaire, on applique la couleur
-            QColor color(it.value().toString());
+            const QColor color(it.value().toString());
             if (color.isValid()) {
                 palette.setColor(roleMap[key], color);
             }
@@ -164,9 +227,43 @@ void Arrera_Theme::parsePaletteFromJson(const QJsonObject &jsonObj, QPalette &pa
     }
 }
 
+void Arrera_Theme::parseTokensFromJson(const QJsonObject &jsonObj, ArreraThemeTokens &tokens)
+{
+    auto readColor = [&jsonObj](const QString &key, QColor &target) {
+        if (jsonObj.contains(key) && jsonObj[key].isString()) {
+            const QColor c(jsonObj[key].toString());
+            if (c.isValid()) {
+                target = c;
+            }
+        }
+    };
+
+    auto readInt = [&jsonObj](const QString &key, int &target, int minVal) {
+        if (jsonObj.contains(key) && jsonObj[key].isDouble()) {
+            target = qMax(minVal, jsonObj[key].toInt());
+        }
+    };
+
+    readColor(QStringLiteral("surfaceContainer"), tokens.surfaceContainer);
+    readColor(QStringLiteral("surfaceElevated"), tokens.surfaceElevated);
+    readColor(QStringLiteral("outline"), tokens.outline);
+    readColor(QStringLiteral("outlineVariant"), tokens.outlineVariant);
+    readColor(QStringLiteral("success"), tokens.success);
+    readColor(QStringLiteral("warning"), tokens.warning);
+    readColor(QStringLiteral("danger"), tokens.danger);
+    readColor(QStringLiteral("onSemantic"), tokens.onSemantic);
+
+    readInt(QStringLiteral("radiusSmall"), tokens.radiusSmall, 0);
+    readInt(QStringLiteral("radiusMedium"), tokens.radiusMedium, 0);
+    readInt(QStringLiteral("radiusLarge"), tokens.radiusLarge, 0);
+    readInt(QStringLiteral("animationDuration"), tokens.animationDuration, 0);
+}
+
 void Arrera_Theme::applyTheme(Qt::ColorScheme scheme)
 {
-    QPalette targetPalette = (scheme == Qt::ColorScheme::Dark) ? m_darkPalette : m_lightPalette;
+    const bool isDark = (scheme == Qt::ColorScheme::Dark);
+    const QPalette targetPalette = isDark ? m_darkPalette : m_lightPalette;
+    m_activeTokens = isDark ? m_darkTokens : m_lightTokens;
 
     qApp->setPalette(targetPalette);
 
@@ -305,18 +402,21 @@ void Arrera_Theme::setupDefaultPalettes()
     m_darkPalette.setColor(QPalette::HighlightedText, QColor("#0B0F14"));
 
     // === Palette Claire (Fallback) ===
-    m_lightPalette.setColor(QPalette::Window,         QColor("#FFFFFF"));
-    m_lightPalette.setColor(QPalette::WindowText,     QColor("#0E1726"));
-    m_lightPalette.setColor(QPalette::Base,           QColor("#FFFFFF"));
-    m_lightPalette.setColor(QPalette::AlternateBase,  QColor("#F6F7FB"));
-    m_lightPalette.setColor(QPalette::ToolTipBase,    QColor("#FFFFFF"));
-    m_lightPalette.setColor(QPalette::ToolTipText,    QColor("#0E1726"));
-    m_lightPalette.setColor(QPalette::Text,           QColor("#0E1726"));
-    m_lightPalette.setColor(QPalette::Button,         QColor("#FFFFFF"));
-    m_lightPalette.setColor(QPalette::ButtonText,     QColor("#0E1726"));
-    m_lightPalette.setColor(QPalette::Highlight,      QColor("#4F46E5"));
-    m_lightPalette.setColor(QPalette::HighlightedText,QColor("#FFFFFF"));
-    m_lightPalette.setColor(QPalette::PlaceholderText,QColor(14,23,38,140));
-    m_lightPalette.setColor(QPalette::Midlight,       QColor("#EDF1F7"));
-    m_lightPalette.setColor(QPalette::Mid,            QColor("#E3E8F0"));
+    m_lightPalette.setColor(QPalette::Window,          QColor("#FFFFFF"));
+    m_lightPalette.setColor(QPalette::WindowText,      QColor("#0E1726"));
+    m_lightPalette.setColor(QPalette::Base,            QColor("#FFFFFF"));
+    m_lightPalette.setColor(QPalette::AlternateBase,   QColor("#F6F7FB"));
+    m_lightPalette.setColor(QPalette::ToolTipBase,     QColor("#FFFFFF"));
+    m_lightPalette.setColor(QPalette::ToolTipText,     QColor("#0E1726"));
+    m_lightPalette.setColor(QPalette::Text,            QColor("#0E1726"));
+    m_lightPalette.setColor(QPalette::Button,          QColor("#FFFFFF"));
+    m_lightPalette.setColor(QPalette::ButtonText,      QColor("#0E1726"));
+    m_lightPalette.setColor(QPalette::Highlight,       QColor("#4F46E5"));
+    m_lightPalette.setColor(QPalette::HighlightedText, QColor("#FFFFFF"));
+    m_lightPalette.setColor(QPalette::PlaceholderText, QColor(14, 23, 38, 140));
+    m_lightPalette.setColor(QPalette::Midlight,        QColor("#EDF1F7"));
+    m_lightPalette.setColor(QPalette::Mid,             QColor("#E3E8F0"));
+
+    m_darkTokens = tokensForPalette(m_darkPalette);
+    m_lightTokens = tokensForPalette(m_lightPalette);
 }

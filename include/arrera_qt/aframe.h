@@ -46,6 +46,7 @@ private:
 
     CardStyle _cardStyle;
     int _cornerRadius;
+    bool _hasCustomRadius;
     bool _hasCustomBgCol;
 
     QColor _bgCol;

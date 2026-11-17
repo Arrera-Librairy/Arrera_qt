@@ -88,6 +88,7 @@ private:
     QColor _baseCol;
     QColor _hoverCol;
     QColor _focusCol;
+    QColor _borderCol;
     QColor _currentCol;
 
     QVariantAnimation *_anim;

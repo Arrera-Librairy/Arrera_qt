@@ -1,4 +1,5 @@
 #include "arrera_qt/asearchbar.h"
+#include "arrera_qt/arrera_theme.h"
 
 #include <QEnterEvent>
 #include <QFontMetrics>
@@ -155,7 +156,7 @@ ASearchBar::ASearchBar(QWidget *parent)
     _currentCol = targetBackgroundColor();
 
     _anim = new QVariantAnimation(this);
-    _anim->setDuration(150);
+    _anim->setDuration(Arrera_Theme::currentTokens().animationDuration);
     connect(_anim, &QVariantAnimation::valueChanged, this, [this](const QVariant &v) {
         _currentCol = v.value<QColor>();
         update();
@@ -298,19 +299,23 @@ void ASearchBar::updateLineEditFont()
 
 void ASearchBar::updateThemeColors()
 {
-    const QColor alternateBase = palette().color(QPalette::AlternateBase);
-    const QColor base = palette().color(QPalette::Base);
     const QColor textCol = palette().color(QPalette::Text);
     const QColor windowText = palette().color(QPalette::WindowText);
     const QColor highlight = palette().color(QPalette::Highlight);
     const QColor highlightedText = palette().color(QPalette::HighlightedText);
+    const ArreraThemeTokens tokens = Arrera_Theme::currentTokens();
+
+    if (_anim) {
+        _anim->setDuration(tokens.animationDuration);
+    }
 
     if (!_hasCustomBaseCol) {
-        _baseCol = alternateBase;
+        _baseCol = tokens.surfaceContainer;
     }
 
     _hoverCol = blendColors(_baseCol, windowText, 0.05);
-    _focusCol = base;
+    _focusCol = tokens.surfaceElevated;
+    _borderCol = tokens.outlineVariant;
 
     QPalette lePalette = _lineEdit->palette();
     lePalette.setColor(QPalette::Text, isEnabled() ? textCol : withAlpha(textCol, 100));
@@ -436,7 +441,7 @@ void ASearchBar::paintEvent(QPaintEvent *event)
     } else if (_lineEdit->hasFocus()) {
         painter.setPen(QPen(palette().color(QPalette::Highlight), 2.0));
     } else {
-        painter.setPen(QPen(withAlpha(palette().color(QPalette::WindowText), 32), 1.0));
+        painter.setPen(QPen(_borderCol, 1.0));
     }
 
     // Pilule Material 3 / GTK4

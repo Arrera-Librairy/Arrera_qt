@@ -1,4 +1,5 @@
 #include "arrera_qt/aapplicationbar.h"
+#include "arrera_qt/arrera_theme.h"
 #include <QPainter>
 #include <QPainterPath>
 #include <QStyle>
@@ -20,10 +21,9 @@ AApplicationBar::AApplicationBar(QWidget *parent)
 
 void AApplicationBar::updateThemeColors()
 {
-    // Dans Material 3, la barre de navigation utilise souvent une couleur
-    // de fond légèrement différente du fond principal (Surface Container).
-    // On utilise AlternateBase qui est configuré dans Arrera_Theme pour ça.
-    _baseCol = palette().color(QPalette::AlternateBase);
+    const ArreraThemeTokens tokens = Arrera_Theme::currentTokens();
+    _baseCol = tokens.surfaceContainer;
+    _radius = tokens.radiusLarge;
 }
 
 void AApplicationBar::changeEvent(QEvent *event)
@@ -45,6 +45,5 @@ void AApplicationBar::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::NoPen); // Bordure invisible
 
     // Forme arrondie sur tous les coins, sans bordure visible, avec une couleur unie
-    int radius = 16;
-    painter.drawRoundedRect(rect(), radius, radius);
+    painter.drawRoundedRect(rect(), _radius, _radius);
 }

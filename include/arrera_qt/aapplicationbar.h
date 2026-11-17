@@ -20,6 +20,7 @@ private:
     void updateThemeColors();
 
     QColor _baseCol;
+    int _radius = 16;
 };
 
 #endif // AAPPLICATIONBAR_H

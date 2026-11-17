@@ -1,4 +1,5 @@
 #include "arrera_qt/apushbutton.h"
+#include "arrera_qt/arrera_theme.h"
 
 #include <QFontMetrics>
 
@@ -129,7 +130,12 @@ void APushButton::updateThemeColors()
     const QColor windowText = palette().color(QPalette::WindowText);
     const QColor highlight = palette().color(QPalette::Highlight);
     const QColor highlightedText = palette().color(QPalette::HighlightedText);
+    const ArreraThemeTokens tokens = Arrera_Theme::currentTokens();
     const bool isDark = windowCol.lightness() < 128;
+
+    if (_anim) {
+        _anim->setDuration(tokens.animationDuration);
+    }
 
     const bool activeChecked = isCheckable() && isChecked() && _variant != Variant::Destructive;
 
@@ -167,7 +173,7 @@ void APushButton::updateThemeColors()
         _baseCol = withAlpha(windowText, 0);
         _hoverCol = withAlpha(windowText, isDark ? 22 : 16);
         _pressedCol = withAlpha(windowText, isDark ? 38 : 30);
-        _borderCol = withAlpha(windowText, isDark ? 64 : 52);
+        _borderCol = tokens.outline;
         _textCol = windowText;
         break;
 
@@ -180,13 +186,11 @@ void APushButton::updateThemeColors()
         break;
 
     case Variant::Destructive: {
-        const QColor danger = isDark ? QColor(QStringLiteral("#E5484D"))
-                                     : QColor(QStringLiteral("#D92D20"));
-        _baseCol = _hasCustomBaseCol ? _baseCol : danger;
+        _baseCol = _hasCustomBaseCol ? _baseCol : tokens.danger;
         _hoverCol = blendColors(_baseCol, QColor(Qt::white), 0.12);
         _pressedCol = blendColors(_baseCol, QColor(Qt::black), 0.18);
         _borderCol = Qt::transparent;
-        _textCol = QColor(Qt::white);
+        _textCol = tokens.onSemantic;
         break;
     }
     }

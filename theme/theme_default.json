@@ -1,4 +1,10 @@
 {
+  "tokens": {
+    "radiusSmall": 8,
+    "radiusMedium": 12,
+    "radiusLarge": 16,
+    "animationDuration": 140
+  },
   "light": {
     "Window": "#FFFFFF",
     "WindowText": "#0E1726",
@@ -10,7 +16,16 @@
     "Button": "#FFFFFF",
     "ButtonText": "#0E1726",
     "Highlight": "#4F46E5",
-    "HighlightedText": "#FFFFFF"
+    "HighlightedText": "#FFFFFF",
+    "tokens": {
+      "surfaceContainer": "#F6F7FB",
+      "surfaceElevated": "#FFFFFF",
+      "outline": "#CBD5E1",
+      "outlineVariant": "#E2E8F0",
+      "success": "#16A34A",
+      "warning": "#D97706",
+      "danger": "#D92D20"
+    }
   },
   "dark": {
     "Window": "#0E1116",
@@ -23,6 +38,15 @@
     "Button": "#11151C",
     "ButtonText": "#E8EDF2",
     "Highlight": "#6D5EFC",
-    "HighlightedText": "#0B0F14"
+    "HighlightedText": "#0B0F14",
+    "tokens": {
+      "surfaceContainer": "#12161F",
+      "surfaceElevated": "#1E1E1E",
+      "outline": "#334155",
+      "outlineVariant": "#232B38",
+      "success": "#4ADE80",
+      "warning": "#FBBF24",
+      "danger": "#E5484D"
+    }
   }
 }

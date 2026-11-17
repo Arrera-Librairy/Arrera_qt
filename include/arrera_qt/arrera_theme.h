@@ -2,6 +2,7 @@
 #define ARRERA_THEME_H
 
 #include <QApplication>
+#include <QColor>
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
@@ -14,6 +15,22 @@
 #include <QStringList>
 #include <QStyleHints>
 #include <QWidget>
+
+struct ArreraThemeTokens {
+    QColor surfaceContainer;
+    QColor surfaceElevated;
+    QColor outline;
+    QColor outlineVariant;
+    QColor success;
+    QColor warning;
+    QColor danger;
+    QColor onSemantic = QColor(Qt::white);
+
+    int radiusSmall = 8;
+    int radiusMedium = 12;
+    int radiusLarge = 16;
+    int animationDuration = 140;
+};
 
 class Arrera_Theme : public QObject
 {
@@ -34,6 +51,8 @@ public:
 
     static Arrera_Theme *instance();
     static QStringList availableThemes();
+    static ArreraThemeTokens tokensForPalette(const QPalette &palette);
+    static ArreraThemeTokens currentTokens();
 
     bool loadThemeFromJson(const QString &filePath);
     void applyTheme(Qt::ColorScheme scheme);
@@ -42,6 +61,10 @@ public:
     QString currentTheme() const;
     ThemeMode themeMode() const;
     Qt::ColorScheme activeColorScheme() const;
+
+    const ArreraThemeTokens &tokens() const;
+    const ArreraThemeTokens &lightTokens() const;
+    const ArreraThemeTokens &darkTokens() const;
 
     void setPersistenceEnabled(bool enable, const QString &settingsGroup = QStringLiteral("ArreraTheme"));
     bool isPersistenceEnabled() const;
@@ -60,6 +83,7 @@ signals:
 private:
     void setupDefaultPalettes();
     void parsePaletteFromJson(const QJsonObject &jsonObj, QPalette &palette);
+    void parseTokensFromJson(const QJsonObject &jsonObj, ArreraThemeTokens &tokens);
     void saveSettings() const;
     static QString resolveThemePath(const QString &themeNameOrPath, QString *normalizedName = nullptr);
 
@@ -71,6 +95,9 @@ private:
     QString m_settingsGroup;
     QPalette m_lightPalette;
     QPalette m_darkPalette;
+    ArreraThemeTokens m_lightTokens;
+    ArreraThemeTokens m_darkTokens;
+    ArreraThemeTokens m_activeTokens;
 };
 
 #endif // ARRERA_THEME_H

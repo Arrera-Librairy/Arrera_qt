@@ -1,17 +1,11 @@
 #include "arrera_qt/aframe.h"
-
-namespace {
-QColor withAlpha(QColor col, int alpha)
-{
-    col.setAlpha(qBound(0, alpha, 255));
-    return col;
-}
-} // namespace
+#include "arrera_qt/arrera_theme.h"
 
 AFrame::AFrame(QWidget *parent)
     : QFrame(parent)
     , _cardStyle(CardStyle::Filled)
     , _cornerRadius(16)
+    , _hasCustomRadius(false)
     , _hasCustomBgCol(false)
 {
     setFrameShape(QFrame::NoFrame);
@@ -42,6 +36,7 @@ int AFrame::cornerRadius() const
 void AFrame::setCornerRadius(int radius)
 {
     const int clamped = qMax(0, radius);
+    _hasCustomRadius = true;
     if (_cornerRadius == clamped) {
         return;
     }
@@ -75,33 +70,34 @@ void AFrame::resetBackgroundColor()
 void AFrame::updateThemeColors()
 {
     const QColor windowCol = palette().color(QPalette::Window);
-    const QColor baseCol = palette().color(QPalette::Base);
-    const QColor altBaseCol = palette().color(QPalette::AlternateBase);
-    const QColor windowText = palette().color(QPalette::WindowText);
-    const bool isDark = windowCol.lightness() < 128;
+    const ArreraThemeTokens tokens = Arrera_Theme::currentTokens();
+
+    if (!_hasCustomRadius) {
+        _cornerRadius = tokens.radiusLarge;
+    }
 
     switch (_cardStyle) {
     case CardStyle::Filled:
         if (!_hasCustomBgCol) {
-            // Utilise Base (surface surélevée) si elle se détache de Window,
-            // sinon bascule sur AlternateBase (ex. theme_default clair où Window == Base).
-            _bgCol = (baseCol != windowCol) ? baseCol : altBaseCol;
+            _bgCol = (tokens.surfaceElevated != windowCol)
+                         ? tokens.surfaceElevated
+                         : tokens.surfaceContainer;
         }
         _borderCol = Qt::transparent;
         break;
 
     case CardStyle::Elevated:
         if (!_hasCustomBgCol) {
-            _bgCol = baseCol;
+            _bgCol = tokens.surfaceElevated;
         }
-        _borderCol = withAlpha(windowText, isDark ? 36 : 22);
+        _borderCol = tokens.outlineVariant;
         break;
 
     case CardStyle::Outlined:
         if (!_hasCustomBgCol) {
             _bgCol = Qt::transparent;
         }
-        _borderCol = withAlpha(windowText, isDark ? 58 : 46);
+        _borderCol = tokens.outline;
         break;
     }
 }
