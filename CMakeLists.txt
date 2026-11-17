@@ -10,15 +10,25 @@ option(ARRERA_QT_BUILD_EXAMPLES "Build the arrera_qt demo application" ${ARRERA_
 
 qt_add_library(arrera_qt STATIC
     include/arrera_qt/aapplicationbar.h
+    include/arrera_qt/acheckbox.h
+    include/arrera_qt/acombobox.h
     include/arrera_qt/aframe.h
+    include/arrera_qt/alineedit.h
     include/arrera_qt/apushbutton.h
+    include/arrera_qt/aradiobutton.h
     include/arrera_qt/arrera_theme.h
     include/arrera_qt/asearchbar.h
+    include/arrera_qt/aswitch.h
     src/aapplicationbar.cpp
+    src/acheckbox.cpp
+    src/acombobox.cpp
     src/aframe.cpp
+    src/alineedit.cpp
     src/apushbutton.cpp
+    src/aradiobutton.cpp
     src/arrera_theme.cpp
     src/asearchbar.cpp
+    src/aswitch.cpp
 )
 add_library(Arrera::Qt ALIAS arrera_qt)
 

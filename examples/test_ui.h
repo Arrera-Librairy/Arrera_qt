@@ -19,6 +19,7 @@ private:
     void setupThemeControls();
     void setupButtonShowcase();
     void setupFrameShowcase();
+    void setupControlsShowcase();
 
     Ui::test_ui *ui;
 };

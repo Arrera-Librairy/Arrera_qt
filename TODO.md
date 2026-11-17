@@ -18,11 +18,11 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 ## Nouveaux widgets à créer
 
 ### Priorité 1 — Contrôles de base
-- [ ] **`ASwitch`** : interrupteur ON/OFF animé (style GTK4 / M3)
-- [ ] **`ALineEdit`** : champ texte standard pour formulaires (coins `10–12px`, bordure discrète au focus, mode mot de passe)
-- [ ] **`AComboBox`** : liste déroulante stylée pour remplacer la `QComboBox` Fusion par défaut
-- [ ] **`ACheckBox`** : case à cocher animée cohérente avec le thème
-- [ ] **`ARadioButton`** : bouton radio cohérent avec le thème
+- [x] **`ASwitch`** : interrupteur ON/OFF animé (style GTK4 / M3)
+- [x] **`ALineEdit`** : champ texte standard pour formulaires (coins `10–12px`, bordure discrète au focus, mode mot de passe)
+- [x] **`AComboBox`** : liste déroulante stylée pour remplacer la `QComboBox` Fusion par défaut
+- [x] **`ACheckBox`** : case à cocher animée cohérente avec le thème
+- [x] **`ARadioButton`** : bouton radio cohérent avec le thème
 
 ### Priorité 2 — Navigation & feedback
 - [ ] **`ANavButton`** : bouton checkable (icône + texte + pilule active) dédié à `AApplicationBar`

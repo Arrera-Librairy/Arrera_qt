@@ -46,7 +46,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="themeComboBox"/>
+          <widget class="AComboBox" name="themeComboBox"/>
          </item>
          <item>
           <widget class="QLabel" name="modeLabel">
@@ -56,7 +56,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="modeComboBox"/>
+          <widget class="AComboBox" name="modeComboBox"/>
          </item>
          <item>
           <spacer name="horizontalSpacer">
@@ -162,6 +162,11 @@
    <extends>QFrame</extends>
    <header>arrera_qt/aapplicationbar.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AComboBox</class>
+   <extends>QComboBox</extends>
+   <header>arrera_qt/acombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

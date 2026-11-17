@@ -1,8 +1,12 @@
 #include "test_ui.h"
 #include "ui_test_ui.h"
+#include "arrera_qt/acheckbox.h"
 #include "arrera_qt/aframe.h"
+#include "arrera_qt/alineedit.h"
 #include "arrera_qt/apushbutton.h"
+#include "arrera_qt/aradiobutton.h"
 #include "arrera_qt/arrera_theme.h"
+#include "arrera_qt/aswitch.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -18,6 +22,7 @@ test_ui::test_ui(QWidget *parent)
     setupThemeControls();
     setupButtonShowcase();
     setupFrameShowcase();
+    setupControlsShowcase();
 }
 
 test_ui::~test_ui()
@@ -142,4 +147,45 @@ void test_ui::setupFrameShowcase()
     }
 
     ui->verticalLayout_2->insertLayout(2, cardsLayout);
+}
+
+void test_ui::setupControlsShowcase()
+{
+    auto *inputsLayout = new QHBoxLayout();
+    inputsLayout->setSpacing(12);
+
+    auto *nameEdit = new ALineEdit(tr("Nom d'utilisateur"), ui->frame);
+    nameEdit->setClearButtonEnabled(true);
+
+    auto *passwordEdit = new ALineEdit(tr("Mot de passe"), ui->frame);
+    passwordEdit->setEchoMode(QLineEdit::Password);
+
+    inputsLayout->addWidget(nameEdit);
+    inputsLayout->addWidget(passwordEdit);
+
+    auto *togglesLayout = new QHBoxLayout();
+    togglesLayout->setSpacing(16);
+
+    auto *switchOff = new ASwitch(tr("Notifications"), ui->frame);
+    auto *switchOn = new ASwitch(tr("Mode compact"), ui->frame);
+    switchOn->setChecked(true);
+
+    auto *checkBox1 = new ACheckBox(tr("Option A"), ui->frame);
+    checkBox1->setChecked(true);
+    auto *checkBox2 = new ACheckBox(tr("Option B"), ui->frame);
+
+    auto *radio1 = new ARadioButton(tr("Choix 1"), ui->frame);
+    radio1->setChecked(true);
+    auto *radio2 = new ARadioButton(tr("Choix 2"), ui->frame);
+
+    togglesLayout->addWidget(switchOff);
+    togglesLayout->addWidget(switchOn);
+    togglesLayout->addWidget(checkBox1);
+    togglesLayout->addWidget(checkBox2);
+    togglesLayout->addWidget(radio1);
+    togglesLayout->addWidget(radio2);
+    togglesLayout->addStretch();
+
+    ui->verticalLayout_2->insertLayout(3, inputsLayout);
+    ui->verticalLayout_2->insertLayout(4, togglesLayout);
 }
