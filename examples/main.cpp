@@ -5,14 +5,15 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName(QStringLiteral("Arrera Softwares"));
+    QCoreApplication::setApplicationName(QStringLiteral("ArreraQtTest"));
 
-    // Initialisation optionnelle du thème si besoin
     Arrera_Theme themeManager;
-    themeManager.loadThemeFromJson(":/arrera_qt/theme/theme_default.json");
+    themeManager.setTheme(QStringLiteral("default"));
+    themeManager.setPersistenceEnabled(true);
 
     test_ui window;
     window.show();
-
 
     return a.exec();
 }

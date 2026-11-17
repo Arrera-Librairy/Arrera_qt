@@ -16,6 +16,8 @@ public:
     ~test_ui();
 
 private:
+    void setupThemeControls();
+
     Ui::test_ui *ui;
 };
 
