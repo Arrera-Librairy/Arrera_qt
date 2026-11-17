@@ -1,7 +1,19 @@
+# Builds CMake / IDE
 /build/
+/build-*/
+/cmake-build-*/
+/out/
+compile_commands.json
+CMakeUserPresets.json
+
+# IDE & éditeurs
+.idea/
 .qtcreator/
-.DS_store
-*.autosave
+.vscode/
 *.user
+*.user.*
+*.autosave
 *.backup
-.idea
+
+# Système
+.DS_Store

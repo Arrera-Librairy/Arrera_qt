@@ -39,6 +39,6 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 ---
 
 ## Intégration & distribution
-- [ ] Ajouter les règles CMake `install()` / `export` pour la cible `arrera_qt` (`find_package(arrera_qt)`)
-- [ ] *(Optionnel)* Ajouter un plugin Qt Designer (`QDesignerCustomWidgetCollectionInterface`) derrière une option CMake `ARRERA_QT_BUILD_DESIGNER_PLUGIN`
-- [ ] Compléter `readme.md` avec des exemples d'intégration (`add_subdirectory` / `FetchContent`) et l'API des widgets
+- [x] Ajouter les règles CMake `install()` / `export` pour la cible `arrera_qt` (`find_package(arrera_qt)`)
+- [x] *(Optionnel)* Ajouter un plugin Qt Designer (`QDesignerCustomWidgetCollectionInterface`) derrière une option CMake `ARRERA_QT_BUILD_DESIGNER_PLUGIN`
+- [x] Compléter `readme.md` avec des exemples d'intégration (`add_subdirectory` / `FetchContent`) et l'API des widgets
