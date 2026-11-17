@@ -3,6 +3,8 @@
 
 #include <QFrame>
 #include <QPainter>
+#include <QColor>
+#include <QEvent>
 
 class AFrame : public QFrame
 {
@@ -12,6 +14,12 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void changeEvent(QEvent *event) override;
+
+private:
+    void updateThemeColors();
+
+    QColor _baseCol;
 };
 
 #endif // AFRAME_H
