@@ -14,20 +14,32 @@ qt_add_library(arrera_qt STATIC
     include/arrera_qt/acombobox.h
     include/arrera_qt/aframe.h
     include/arrera_qt/alineedit.h
+    include/arrera_qt/anavbutton.h
+    include/arrera_qt/aprogressbar.h
     include/arrera_qt/apushbutton.h
     include/arrera_qt/aradiobutton.h
     include/arrera_qt/arrera_theme.h
+    include/arrera_qt/ascrollarea.h
+    include/arrera_qt/ascrollbar.h
     include/arrera_qt/asearchbar.h
+    include/arrera_qt/asegmentedbutton.h
+    include/arrera_qt/aslider.h
     include/arrera_qt/aswitch.h
     src/aapplicationbar.cpp
     src/acheckbox.cpp
     src/acombobox.cpp
     src/aframe.cpp
     src/alineedit.cpp
+    src/anavbutton.cpp
+    src/aprogressbar.cpp
     src/apushbutton.cpp
     src/aradiobutton.cpp
     src/arrera_theme.cpp
+    src/ascrollarea.cpp
+    src/ascrollbar.cpp
     src/asearchbar.cpp
+    src/asegmentedbutton.cpp
+    src/aslider.cpp
     src/aswitch.cpp
 )
 add_library(Arrera::Qt ALIAS arrera_qt)

@@ -25,11 +25,11 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 - [x] **`ARadioButton`** : bouton radio cohérent avec le thème
 
 ### Priorité 2 — Navigation & feedback
-- [ ] **`ANavButton`** : bouton checkable (icône + texte + pilule active) dédié à `AApplicationBar`
-- [ ] **`ASegmentedButton`** : sélecteur segmenté en pilule (2 à 4 options côte à côte, ex. `Auto | Clair | Sombre`)
-- [ ] **`ASlider`** : curseur avec piste épaisse arrondie
-- [ ] **`AProgressBar`** : barre de progression arrondie (déterminée et indéterminée)
-- [ ] **`AScrollBar` / `AScrollArea`** *(ou `QProxyStyle`)* : barres de défilement fines et modernes
+- [x] **`ANavButton`** : bouton checkable (icône + texte + pilule active) dédié à `AApplicationBar`
+- [x] **`ASegmentedButton`** : sélecteur segmenté en pilule (2 à 4 options côte à côte, ex. `Auto | Clair | Sombre`)
+- [x] **`ASlider`** : curseur avec piste épaisse arrondie
+- [x] **`AProgressBar`** : barre de progression arrondie (déterminée et indéterminée)
+- [x] **`AScrollBar` / `AScrollArea`** *(ou `QProxyStyle`)* : barres de défilement fines et modernes
 
 ### Priorité 3 — Composants confort (style libadwaita)
 - [ ] **`ASettingRow`** *(équivalent `AdwActionRow`)* : ligne titre + sous-titre + contrôle aligné à droite (`ASwitch`, `AComboBox`, `APushButton`)

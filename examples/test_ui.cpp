@@ -3,14 +3,20 @@
 #include "arrera_qt/acheckbox.h"
 #include "arrera_qt/aframe.h"
 #include "arrera_qt/alineedit.h"
+#include "arrera_qt/anavbutton.h"
+#include "arrera_qt/aprogressbar.h"
 #include "arrera_qt/apushbutton.h"
 #include "arrera_qt/aradiobutton.h"
 #include "arrera_qt/arrera_theme.h"
+#include "arrera_qt/ascrollarea.h"
+#include "arrera_qt/asegmentedbutton.h"
+#include "arrera_qt/aslider.h"
 #include "arrera_qt/aswitch.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QSignalBlocker>
+#include <QStyle>
 #include <QVBoxLayout>
 
 test_ui::test_ui(QWidget *parent)
@@ -23,6 +29,7 @@ test_ui::test_ui(QWidget *parent)
     setupButtonShowcase();
     setupFrameShowcase();
     setupControlsShowcase();
+    setupNavigationAndFeedbackShowcase();
 }
 
 test_ui::~test_ui()
@@ -188,4 +195,80 @@ void test_ui::setupControlsShowcase()
 
     ui->verticalLayout_2->insertLayout(3, inputsLayout);
     ui->verticalLayout_2->insertLayout(4, togglesLayout);
+}
+
+void test_ui::setupNavigationAndFeedbackShowcase()
+{
+    Arrera_Theme *themeManager = Arrera_Theme::instance();
+
+    // 1. ASegmentedButton relié dynamiquement au mode Auto / Clair / Sombre
+    auto *feedbackRow = new QHBoxLayout();
+    feedbackRow->setSpacing(14);
+
+    auto *segmented = new ASegmentedButton(ui->frame);
+    segmented->addSegment(tr("Auto"), QVariant::fromValue(Arrera_Theme::ThemeMode::Auto));
+    segmented->addSegment(tr("Clair"), QVariant::fromValue(Arrera_Theme::ThemeMode::Light));
+    segmented->addSegment(tr("Sombre"), QVariant::fromValue(Arrera_Theme::ThemeMode::Dark));
+    segmented->setCurrentData(QVariant::fromValue(themeManager->themeMode()));
+
+    connect(segmented, &ASegmentedButton::currentIndexChanged, this, [segmented, themeManager]() {
+        themeManager->setThemeMode(segmented->currentData().value<Arrera_Theme::ThemeMode>());
+    });
+    connect(themeManager, &Arrera_Theme::themeModeChanged, this, [segmented](Arrera_Theme::ThemeMode mode) {
+        const QSignalBlocker blocker(segmented);
+        segmented->setCurrentData(QVariant::fromValue(mode));
+    });
+
+    // 2. ASlider + AProgressBar déterminée et indéterminée
+    auto *slider = new ASlider(Qt::Horizontal, ui->frame);
+    slider->setRange(0, 100);
+    slider->setValue(45);
+
+    auto *progressLayout = new QVBoxLayout();
+    progressLayout->setSpacing(8);
+
+    auto *progressDeterminate = new AProgressBar(ui->frame);
+    progressDeterminate->setRange(0, 100);
+    progressDeterminate->setValue(45);
+    progressDeterminate->setTextVisible(true);
+
+    auto *progressIndeterminate = new AProgressBar(ui->frame);
+    progressIndeterminate->setRange(0, 0);
+
+    connect(slider, &ASlider::valueChanged, progressDeterminate, &AProgressBar::setValue);
+
+    progressLayout->addWidget(progressDeterminate);
+    progressLayout->addWidget(progressIndeterminate);
+
+    // 3. Aperçu AScrollArea / AScrollBar
+    auto *scrollArea = new AScrollArea(ui->frame);
+    scrollArea->setFixedHeight(74);
+    scrollArea->setMinimumWidth(160);
+    auto *scrollContent = new QWidget(scrollArea);
+    auto *scrollLayout = new QVBoxLayout(scrollContent);
+    scrollLayout->setContentsMargins(6, 4, 14, 4);
+    scrollLayout->setSpacing(4);
+    for (int i = 1; i <= 8; ++i) {
+        scrollLayout->addWidget(new QLabel(tr("Élément défilant %1").arg(i), scrollContent));
+    }
+    scrollArea->setWidget(scrollContent);
+
+    feedbackRow->addWidget(segmented);
+    feedbackRow->addWidget(slider, 1);
+    feedbackRow->addLayout(progressLayout, 1);
+    feedbackRow->addWidget(scrollArea);
+
+    ui->verticalLayout_2->insertLayout(5, feedbackRow);
+
+    // 4. ANavButton dans AApplicationBar (frame_2)
+    if (auto *barLayout = qobject_cast<QVBoxLayout *>(ui->frame_2->layout())) {
+        auto *navHome = new ANavButton(style()->standardIcon(QStyle::SP_DirHomeIcon), tr("Accueil"), ui->frame_2);
+        navHome->setChecked(true);
+        auto *navFiles = new ANavButton(style()->standardIcon(QStyle::SP_DirIcon), tr("Projets"), ui->frame_2);
+        auto *navPrefs = new ANavButton(style()->standardIcon(QStyle::SP_FileDialogDetailedView), tr("Paramètres"), ui->frame_2);
+
+        barLayout->insertWidget(0, navHome);
+        barLayout->insertWidget(1, navFiles);
+        barLayout->insertWidget(2, navPrefs);
+    }
 }
