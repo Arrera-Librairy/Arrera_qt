@@ -11,6 +11,7 @@ test_ui::test_ui(QWidget *parent)
     , ui(new Ui::test_ui)
 {
     ui->setupUi(this);
+    ui->lineEdit->setPlaceholderText(tr("Rechercher dans Arrera Qt..."));
     setupThemeControls();
     setupButtonShowcase();
 }
