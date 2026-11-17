@@ -11,12 +11,11 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 - [x] `AFrame` (conteneur arrondi adapté au thème, sans bordure dure)
 - [x] `AApplicationBar` (barre de navigation latérale)
 - [x] `ASearchBar` (barre de recherche en pilule avec animations hover/focus)
-- [x] `APushButton` (bouton pilule avec animation hover)
+- [x] `APushButton` (bouton pilule avec variantes `Primary`, `Secondary`, `Outlined`, `Flat`, `Destructive`, états complet et `sizeHint()`)
 
 ---
 
 ## Améliorations sur l'existant
-- [ ] **`APushButton`** : ajouter les variantes (`Primary`, `Secondary / Tonal`, `Flat / Ghost`, `Destructive`), gérer les états `!isEnabled()`, `isDown()`, `isChecked()`, le focus clavier et implémenter `sizeHint()`
 - [ ] **`ASearchBar`** : déplacer l'ajustement de taille de police hors de `updateThemeColors()` (actuellement incrémenté à chaque `PaletteChange`) et ajouter une icône loupe + bouton effacer optionnels
 - [ ] **`AFrame`** : ajouter une `Q_PROPERTY` de style (`Filled`, `Elevated`, `Outlined`) configurable dans Qt Designer
 - [ ] **`Arrera_Theme` & JSON** : enrichir les thèmes avec des tokens dédiés (rayons d'arrondi, bordures subtiles `OutlineVariant`, couleurs sémantiques succès/avertissement/danger)

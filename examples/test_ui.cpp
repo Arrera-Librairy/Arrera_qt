@@ -1,7 +1,9 @@
 #include "test_ui.h"
 #include "ui_test_ui.h"
+#include "arrera_qt/apushbutton.h"
 #include "arrera_qt/arrera_theme.h"
 
+#include <QHBoxLayout>
 #include <QSignalBlocker>
 
 test_ui::test_ui(QWidget *parent)
@@ -10,6 +12,7 @@ test_ui::test_ui(QWidget *parent)
 {
     ui->setupUi(this);
     setupThemeControls();
+    setupButtonShowcase();
 }
 
 test_ui::~test_ui()
@@ -62,4 +65,42 @@ void test_ui::setupThemeControls()
             ui->modeComboBox->setCurrentIndex(idx);
         }
     });
+}
+
+void test_ui::setupButtonShowcase()
+{
+    ui->pushButton->setText(tr("Primary"));
+
+    auto *rowLayout = new QHBoxLayout();
+    rowLayout->setSpacing(10);
+
+    auto *secondaryBtn = new APushButton(tr("Secondary"), ui->frame);
+    secondaryBtn->setVariant(APushButton::Variant::Secondary);
+
+    auto *outlinedBtn = new APushButton(tr("Outlined"), ui->frame);
+    outlinedBtn->setVariant(APushButton::Variant::Outlined);
+
+    auto *flatBtn = new APushButton(tr("Flat"), ui->frame);
+    flatBtn->setVariant(APushButton::Variant::Flat);
+
+    auto *toggleBtn = new APushButton(tr("Toggle"), ui->frame);
+    toggleBtn->setVariant(APushButton::Variant::Outlined);
+    toggleBtn->setCheckable(true);
+    toggleBtn->setChecked(true);
+
+    auto *destructiveBtn = new APushButton(tr("Destructive"), ui->frame);
+    destructiveBtn->setVariant(APushButton::Variant::Destructive);
+
+    auto *disabledBtn = new APushButton(tr("Disabled"), ui->frame);
+    disabledBtn->setEnabled(false);
+
+    rowLayout->addWidget(secondaryBtn);
+    rowLayout->addWidget(outlinedBtn);
+    rowLayout->addWidget(flatBtn);
+    rowLayout->addWidget(toggleBtn);
+    rowLayout->addWidget(destructiveBtn);
+    rowLayout->addWidget(disabledBtn);
+    rowLayout->addStretch();
+
+    ui->verticalLayout_2->insertLayout(1, rowLayout);
 }
