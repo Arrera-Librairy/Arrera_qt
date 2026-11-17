@@ -8,7 +8,7 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 - [x] Structure bibliothèque CMake (`arrera_qt` / alias `Arrera::Qt`) et séparation de la démo dans `examples/`
 - [x] Embarquement des thèmes JSON en ressources Qt (`:/arrera_qt/theme/...`)
 - [x] Gestionnaire de thèmes dynamique [`Arrera_Theme`](include/arrera_qt/arrera_theme.h) (`availableThemes`, `setTheme`, `ThemeMode::Auto/Light/Dark`, persistance `QSettings`)
-- [x] `AFrame` (conteneur arrondi adapté au thème, sans bordure dure)
+- [x] `AFrame` (conteneur arrondi avec variantes `Filled`, `Elevated`, `Outlined`, rayon et fond personnalisables)
 - [x] `AApplicationBar` (barre de navigation latérale)
 - [x] `ASearchBar` (barre de recherche en pilule : loupe vectorielle, bouton effacer, animations hover/focus, `sizeHint()` et état désactivé)
 - [x] `APushButton` (bouton pilule avec variantes `Primary`, `Secondary`, `Outlined`, `Flat`, `Destructive`, états complet et `sizeHint()`)
@@ -16,7 +16,6 @@ Feuille de route pour faire d'`Arrera::Qt` une bibliothèque complète au style 
 ---
 
 ## Améliorations sur l'existant
-- [ ] **`AFrame`** : ajouter une `Q_PROPERTY` de style (`Filled`, `Elevated`, `Outlined`) configurable dans Qt Designer
 - [ ] **`Arrera_Theme` & JSON** : enrichir les thèmes avec des tokens dédiés (rayons d'arrondi, bordures subtiles `OutlineVariant`, couleurs sémantiques succès/avertissement/danger)
 
 ---

@@ -1,10 +1,13 @@
 #include "test_ui.h"
 #include "ui_test_ui.h"
+#include "arrera_qt/aframe.h"
 #include "arrera_qt/apushbutton.h"
 #include "arrera_qt/arrera_theme.h"
 
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QSignalBlocker>
+#include <QVBoxLayout>
 
 test_ui::test_ui(QWidget *parent)
     : QMainWindow(parent)
@@ -14,6 +17,7 @@ test_ui::test_ui(QWidget *parent)
     ui->lineEdit->setPlaceholderText(tr("Rechercher dans Arrera Qt..."));
     setupThemeControls();
     setupButtonShowcase();
+    setupFrameShowcase();
 }
 
 test_ui::~test_ui()
@@ -104,4 +108,38 @@ void test_ui::setupButtonShowcase()
     rowLayout->addStretch();
 
     ui->verticalLayout_2->insertLayout(1, rowLayout);
+}
+
+void test_ui::setupFrameShowcase()
+{
+    auto *cardsLayout = new QHBoxLayout();
+    cardsLayout->setSpacing(12);
+
+    const struct {
+        QString title;
+        AFrame::CardStyle style;
+    } specs[] = {
+        {tr("AFrame Filled"), AFrame::CardStyle::Filled},
+        {tr("AFrame Elevated"), AFrame::CardStyle::Elevated},
+        {tr("AFrame Outlined"), AFrame::CardStyle::Outlined}
+    };
+
+    for (const auto &spec : specs) {
+        auto *card = new AFrame(ui->frame);
+        card->setCardStyle(spec.style);
+        card->setMinimumHeight(72);
+
+        auto *cardLayout = new QVBoxLayout(card);
+        cardLayout->setContentsMargins(16, 12, 16, 12);
+
+        auto *label = new QLabel(spec.title, card);
+        QFont f = label->font();
+        f.setWeight(QFont::Medium);
+        label->setFont(f);
+        cardLayout->addWidget(label);
+
+        cardsLayout->addWidget(card);
+    }
+
+    ui->verticalLayout_2->insertLayout(2, cardsLayout);
 }
