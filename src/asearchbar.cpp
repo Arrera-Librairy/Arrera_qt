@@ -128,6 +128,7 @@ ASearchBar::ASearchBar(QWidget *parent)
     , _clearButtonEnabled(true)
     , _searchIconVisible(true)
     , _hasCustomBaseCol(false)
+    , _anim(nullptr)
 {
     setMinimumHeight(48);
     setCursor(Qt::IBeamCursor);
@@ -150,17 +151,17 @@ ASearchBar::ASearchBar(QWidget *parent)
     _layout->addWidget(_clearBtn);
     setLayout(_layout);
 
-    updateLayoutMargins();
-    updateLineEditFont();
-    updateThemeColors();
-    _currentCol = targetBackgroundColor();
-
     _anim = new QVariantAnimation(this);
     _anim->setDuration(Arrera_Theme::currentTokens().animationDuration);
     connect(_anim, &QVariantAnimation::valueChanged, this, [this](const QVariant &v) {
         _currentCol = v.value<QColor>();
         update();
     });
+
+    updateLayoutMargins();
+    updateLineEditFont();
+    updateThemeColors();
+    _currentCol = targetBackgroundColor();
 
     connect(_lineEdit, &QLineEdit::textChanged, this, [this](const QString &t) {
         updateClearButtonVisibility();
